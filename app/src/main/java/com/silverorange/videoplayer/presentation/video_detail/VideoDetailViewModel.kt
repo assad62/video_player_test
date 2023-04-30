@@ -1,6 +1,5 @@
 package com.silverorange.videoplayer.presentation.video_detail
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -17,8 +16,8 @@ class VideoDetailViewModel @Inject constructor(
     private val getVideosUseCase: GetVideosUseCase
 ):ViewModel(){
 
-    private val _state = mutableStateOf(VideoDetailState())
-    val state: State<VideoDetailState> = _state
+    private val _state = mutableStateOf(VideoListState())
+    val state: State<VideoListState> = _state
 
     init {
         getVideos()
@@ -28,15 +27,15 @@ class VideoDetailViewModel @Inject constructor(
         getVideosUseCase().onEach { result ->
             when (result) {
                 is Resource.Success -> {
-                    _state.value = VideoDetailState(videos = result.data ?: emptyList())
+                    _state.value = VideoListState(videos = result.data ?: emptyList())
                 }
                 is Resource.Error -> {
-                    _state.value = VideoDetailState(
+                    _state.value = VideoListState(
                         error = result.message ?: "An unexpected error occured"
                     )
                 }
                 is Resource.Loading -> {
-                    _state.value = VideoDetailState(isLoading = true)
+                    _state.value = VideoListState(isLoading = true)
                 }
             }
         }.launchIn(viewModelScope)
