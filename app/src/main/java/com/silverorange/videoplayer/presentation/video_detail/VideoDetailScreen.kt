@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.silverorange.videoplayer.domain.model.Video
+import dev.jeziellago.compose.markdowntext.MarkdownText
 
 @Composable
 fun VideoDetailScreen(
@@ -51,7 +52,7 @@ fun TopBar() {
 fun TextCard(videos: List<Video>) {
     LazyColumn {
         items(videos) { video ->
-            Text(text = video.description)
+            MarkdownText(markdown = video.description)
         }
     }
 
