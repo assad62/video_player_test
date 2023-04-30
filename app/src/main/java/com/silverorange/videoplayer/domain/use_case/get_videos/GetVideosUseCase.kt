@@ -14,13 +14,13 @@ class GetVideosUseCase @Inject constructor(
 ) {
     operator fun invoke(): Flow<Resource<List<Video>>> = flow {
         try {
-            emit(Resource.Loading<List<Video>>())
+            emit(Resource.Loading())
             val videoList = repository.getVideos()
-            emit(Resource.Success<List<Video>>(videoList))
+            emit(Resource.Success(videoList))
         } catch(e: HttpException) {
-            emit(Resource.Error<List<Video>>(e.localizedMessage ?: "An unexpected error occured"))
+            emit(Resource.Error(e.localizedMessage ?: "An unexpected error occured"))
         } catch(e: IOException) {
-            emit(Resource.Error<List<Video>>("Couldn't reach server. Check your internet connection."))
+            emit(Resource.Error("Couldn't reach server. Check your internet connection."))
         }
     }
 }
