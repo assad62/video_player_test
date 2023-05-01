@@ -83,4 +83,8 @@ dependencies {
     //coil is required for markdown library to work
     implementation "io.coil-kt:coil-compose:2.2.0"
 
+    //video
+    implementation 'androidx.media3:media3-exoplayer:1.0.1'
+    implementation 'androidx.media3:media3-ui:1.0.1'
+
 }
