@@ -15,8 +15,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.LiveData
 import com.silverorange.videoplayer.domain.model.Video
+import com.silverorange.videoplayer.presentation.video_detail.components.TextCard
 import com.silverorange.videoplayer.presentation.video_detail.components.TopBar
+import com.silverorange.videoplayer.utils.LinkedList
 import dev.jeziellago.compose.markdowntext.MarkdownText
 
 @Composable
@@ -24,6 +27,7 @@ fun VideoDetailScreen(
     viewModel: VideoDetailViewModel = hiltViewModel()
 ){
     val state = viewModel.state.value
+    val index = viewModel.videoIndex
 
     Scaffold(topBar = { TopBar() }) {
         Box(modifier = Modifier.fillMaxSize()){
@@ -37,7 +41,11 @@ fun VideoDetailScreen(
 
                     CircularProgressIndicator()
                 }
-                TextCard(state.videos)
+                index.value?.let { it ->
+                    state.videos.nodeAtIndex(it)?.value?.let {
+                            it1 -> TextCard(video = it1)
+                    }
+                }
             }
 
 
@@ -49,12 +57,4 @@ fun VideoDetailScreen(
 
 
 
-@Composable
-fun TextCard(videos: List<Video>) {
-    LazyColumn {
-        items(videos) { video ->
-            MarkdownText(markdown = video.description)
-        }
-    }
 
-}
