@@ -19,11 +19,13 @@ import androidx.lifecycle.LiveData
 import com.silverorange.videoplayer.domain.model.Video
 import com.silverorange.videoplayer.presentation.video_detail.components.TextCard
 import com.silverorange.videoplayer.presentation.video_detail.components.TopBar
+import com.silverorange.videoplayer.presentation.video_detail.components.VideoPlayer
 import com.silverorange.videoplayer.utils.LinkedList
 import dev.jeziellago.compose.markdowntext.MarkdownText
 
 @Composable
 fun VideoDetailScreen(
+
     viewModel: VideoDetailViewModel = hiltViewModel()
 ){
     val state = viewModel.state.value
@@ -34,18 +36,16 @@ fun VideoDetailScreen(
 
             Column(
                 modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
+                verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 if(state.isLoading){
 
                     CircularProgressIndicator()
                 }
-                index.value?.let { it ->
-                    state.videos.nodeAtIndex(it)?.value?.let {
-                            it1 -> TextCard(video = it1)
-                    }
-                }
+                index.value?.let {
+                        it1 -> state.videos.nodeAtIndex(it1)?.value?.let { it1 -> VideoPlayer(url = it1.fullURL ) } }
+
             }
 
 
