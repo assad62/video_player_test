@@ -60,7 +60,7 @@ fun VideoPlayer(
             modifier = Modifier.align(Alignment.Center),
             isVisible = { shouldShowControls },
             isPlaying = { isPlaying },
-            onReplayClick = {
+            onBackClick = {
                 //pause on navigation
                 isPlaying = false
                 viewModel.player.pause()
@@ -99,7 +99,7 @@ fun VideoPlayer(
     modifier: Modifier = Modifier,
     isVisible: () -> Boolean,
     isPlaying: () -> Boolean,
-    onReplayClick: () -> Unit,
+    onBackClick: () -> Unit,
     onForwardClick: () -> Unit,
     onPauseToggle: () -> Unit,
     playbackState: () -> Int,
@@ -122,7 +122,7 @@ fun VideoPlayer(
                     .align(Alignment.Center)
                     .fillMaxWidth(),
                 isPlaying = isPlaying,
-                onReplayClick = onReplayClick,
+                onBackClick = onBackClick,
                 onForwardClick = onForwardClick,
                 onPauseToggle = onPauseToggle,
                 playbackState = playbackState
@@ -146,7 +146,7 @@ private fun CenterControls(
     modifier: Modifier = Modifier,
     isPlaying: () -> Boolean,
     playbackState: () -> Int,
-    onReplayClick: () -> Unit,
+    onBackClick: () -> Unit,
     onPauseToggle: () -> Unit,
     onForwardClick: () -> Unit
 ) {
@@ -155,7 +155,7 @@ private fun CenterControls(
     val playerState = remember(playbackState()) { playbackState() }
 
     Row(modifier = modifier, horizontalArrangement = Arrangement.SpaceEvenly) {
-        IconButton(modifier = Modifier.size(40.dp), onClick = onReplayClick) {
+        IconButton(modifier = Modifier.size(40.dp), onClick = onBackClick) {
             Image(
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop,
