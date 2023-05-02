@@ -1,27 +1,23 @@
 package com.silverorange.videoplayer.presentation.video_detail
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.LiveData
-import com.silverorange.videoplayer.domain.model.Video
-import com.silverorange.videoplayer.presentation.video_detail.components.TextCard
+import com.silverorange.videoplayer.presentation.video_detail.components.VideoDescription
 import com.silverorange.videoplayer.presentation.video_detail.components.TopBar
 import com.silverorange.videoplayer.presentation.video_detail.components.VideoPlayer
-import com.silverorange.videoplayer.utils.LinkedList
-import dev.jeziellago.compose.markdowntext.MarkdownText
 
 @Composable
 fun VideoDetailScreen(
@@ -29,7 +25,13 @@ fun VideoDetailScreen(
     viewModel: VideoDetailViewModel = hiltViewModel()
 ){
     val state = viewModel.state.value
-    val index = viewModel.videoIndex
+    val index = viewModel.videoIndex.value
+    val video = index?.let {
+        viewModel.state.value.videos.nodeAtIndex(it)?.value
+    }
+    val title = video?.title
+    val authorName = video?.author?.name
+
 
     Scaffold(topBar = { TopBar() }) {
         Box(modifier = Modifier.fillMaxSize()){
@@ -43,9 +45,70 @@ fun VideoDetailScreen(
 
                     CircularProgressIndicator()
                 }
-                index.value?.let {
-                        it1 -> state.videos.nodeAtIndex(it1)?.value?.let { it1 -> VideoPlayer(url = it1.fullURL ) } }
 
+                video?.fullURL?.let { it1 ->
+                    VideoPlayer(url = it1)
+                }
+                Spacer(modifier = Modifier.size(10.dp))
+                Column(){
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment =   Alignment.Bottom,
+                        horizontalArrangement = Arrangement.Start
+                    ) {
+                        Spacer(modifier = Modifier.size(5.dp))
+                        Text(
+                            "Title: ",
+                            style = TextStyle(
+                                fontSize = 24.sp,
+                                fontFamily = FontFamily.Monospace,
+                                fontWeight = FontWeight.W800,
+                                fontStyle = FontStyle.Normal,
+
+                            )
+                        )
+                        if (title != null) {
+                            Text(text = title,
+                                style = TextStyle(
+                                    fontSize = 18.sp,
+                                    fontFamily = FontFamily.Monospace,
+                                    fontWeight = FontWeight.W800,
+                                    fontStyle = FontStyle.Normal,
+                                ))
+                        }
+                    }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Start,
+                        verticalAlignment =   Alignment.Bottom
+                    ) {
+                        Spacer(modifier = Modifier.size(10.dp))
+                        Text("Author: ",
+                            style = TextStyle(
+                                fontSize = 21.sp,
+                                fontFamily = FontFamily.Monospace,
+                                fontWeight = FontWeight.W800,
+                                fontStyle = FontStyle.Normal,
+                            )
+                        )
+                        if (authorName != null) {
+                            Text(text = authorName,
+                                textAlign = TextAlign.Center,
+                                style = TextStyle(
+                                    fontSize = 18.sp,
+                                    fontFamily = FontFamily.Monospace,
+                                    fontWeight = FontWeight.W800,
+                                    fontStyle = FontStyle.Normal,
+                                )
+                            )
+                        }
+                    }
+                }
+                Spacer(modifier = Modifier.size(10.dp))
+                video?.description?.let {
+                        it1 -> VideoDescription(videoDescription = it1)
+                }
             }
 
 

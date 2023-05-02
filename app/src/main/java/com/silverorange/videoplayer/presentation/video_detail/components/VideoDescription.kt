@@ -5,8 +5,8 @@ import com.silverorange.videoplayer.domain.model.Video
 import dev.jeziellago.compose.markdowntext.MarkdownText
 
 @Composable
-fun TextCard(video: Video) {
+fun VideoDescription(videoDescription: String) {
 
-    MarkdownText(markdown = video.title)
+    MarkdownText(markdown = videoDescription)
 
 }
