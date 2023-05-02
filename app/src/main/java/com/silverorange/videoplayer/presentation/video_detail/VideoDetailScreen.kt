@@ -15,13 +15,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.silverorange.videoplayer.presentation.video_detail.components.PlayerControls
 import com.silverorange.videoplayer.presentation.video_detail.components.VideoDescription
 import com.silverorange.videoplayer.presentation.video_detail.components.TopBar
 import com.silverorange.videoplayer.presentation.video_detail.components.VideoPlayer
 
 @Composable
 fun VideoDetailScreen(
-
     viewModel: VideoDetailViewModel = hiltViewModel()
 ){
     val state = viewModel.state.value
@@ -106,9 +106,12 @@ fun VideoDetailScreen(
                     }
                 }
                 Spacer(modifier = Modifier.size(10.dp))
+
                 video?.description?.let {
-                        it1 -> VideoDescription(videoDescription = it1)
+                        it1 ->
+                    VideoDescription(videoDescription = it1)
                 }
+
             }
 
 
