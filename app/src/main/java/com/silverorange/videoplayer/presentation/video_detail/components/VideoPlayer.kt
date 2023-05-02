@@ -1,9 +1,8 @@
 package com.silverorange.videoplayer.presentation.video_detail.components
+
 import android.media.metrics.PlaybackStateEvent.STATE_ENDED
-import android.view.ViewGroup
-import android.widget.FrameLayout
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
@@ -11,10 +10,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.IconButton
 import androidx.compose.runtime.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,36 +26,30 @@ import com.silverorange.videoplayer.R
 @Composable
 fun VideoPlayer(
     url:String,
-    viewModel: VideoPlayerViewModel = hiltViewModel()
+    viewModel: VideoPlayerViewModel = hiltViewModel(),
+    next:()->Unit,
+    previous:()->Unit
 ){
 
 
 
     val context = LocalContext.current
     val playerView = StyledPlayerView(context)
-
     playerView.useController = false
+
+    //playerView.setKeepContentOnPlayerReset(true);
 
     val playWhenReady by rememberSaveable {
         mutableStateOf(false)
     }
-    LaunchedEffect(key1 = "", block = {
-        viewModel.loadVideo(url)
-        viewModel.player.playWhenReady = playWhenReady
-        playerView.player = viewModel.player
-    })
-
-    var shouldShowControls by remember { mutableStateOf(true) }
+    viewModel.player.playWhenReady = playWhenReady
+    playerView.player = viewModel.player
+    viewModel.loadVideo(url)
+    val shouldShowControls by remember { mutableStateOf(true) }
 
     var isPlaying by remember { mutableStateOf(viewModel.player.isPlaying) }
 
-    var totalDuration by remember { mutableStateOf(0L) }
-
-    var currentTime by remember { mutableStateOf(0L) }
-
-    var bufferedPercentage by remember { mutableStateOf(0) }
-
-    var playbackState by remember { mutableStateOf(viewModel.player.playbackState) }
+    val playbackState by remember { mutableStateOf(viewModel.player.playbackState) }
 
 
     Box(){
@@ -71,16 +60,22 @@ fun VideoPlayer(
             modifier = Modifier.align(Alignment.Center),
             isVisible = { shouldShowControls },
             isPlaying = { isPlaying },
-            title = { "" },
-            onReplayClick = { viewModel.player.seekBack() },
-            onForwardClick = { viewModel.player.seekForward() },
+            onReplayClick = {
+                //pause on navigation
+                isPlaying = false
+                viewModel.player.pause()
+                previous() },
+            onForwardClick = {
+                //pause on navigation
+                isPlaying = false
+                viewModel.player.pause()
+                next() },
             onPauseToggle = { when {
                 viewModel.player.isPlaying -> {
                     // pause the video
                     viewModel.player.pause()
                 }
-                viewModel.player.isPlaying.not() &&
-                        playbackState == STATE_ENDED -> {
+                viewModel.player.isPlaying.not() && playbackState == STATE_ENDED -> {
                     viewModel.player.seekTo(0)
                     viewModel.player.playWhenReady = true
                 }
@@ -91,32 +86,24 @@ fun VideoPlayer(
                 }
             }
                 isPlaying = isPlaying.not() },
-            totalDuration = { totalDuration },
-            currentTime = { currentTime },
-            bufferedPercentage = { bufferedPercentage },
+
             playbackState = { playbackState },
-            onSeekChanged = {}
         )
     }
 
 }
 
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
  fun PlayerControls(
     modifier: Modifier = Modifier,
     isVisible: () -> Boolean,
     isPlaying: () -> Boolean,
-    title: () -> String,
     onReplayClick: () -> Unit,
     onForwardClick: () -> Unit,
     onPauseToggle: () -> Unit,
-    totalDuration: () -> Long,
-    currentTime: () -> Long,
-    bufferedPercentage: () -> Int,
     playbackState: () -> Int,
-    onSeekChanged: (timeMs: Float) -> Unit
+
 ) {
 
     val visible = remember(isVisible()) { isVisible() }

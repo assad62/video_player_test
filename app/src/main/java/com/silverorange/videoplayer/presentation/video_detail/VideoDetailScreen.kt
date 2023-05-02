@@ -1,10 +1,12 @@
 package com.silverorange.videoplayer.presentation.video_detail
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
@@ -25,7 +27,8 @@ fun VideoDetailScreen(
     viewModel: VideoDetailViewModel = hiltViewModel()
 ){
     val state = viewModel.state.value
-    val index = viewModel.videoIndex.value
+    val index = viewModel.videoIndex.observeAsState().value
+    Log.d("99120", "index is $index")
     val video = index?.let {
         viewModel.state.value.videos.nodeAtIndex(it)?.value
     }
@@ -47,7 +50,17 @@ fun VideoDetailScreen(
                 }
 
                 video?.fullURL?.let { it1 ->
-                    VideoPlayer(url = it1)
+
+                    VideoPlayer(url = it1,
+                        next = {
+
+                            viewModel.nextVideo()
+
+                       }, previous = {
+
+                            viewModel.prevVideo()
+                       }
+                    )
                 }
                 Spacer(modifier = Modifier.size(10.dp))
                 Column(){

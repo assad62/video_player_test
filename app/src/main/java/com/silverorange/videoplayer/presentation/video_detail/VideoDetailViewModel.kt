@@ -1,5 +1,6 @@
 package com.silverorange.videoplayer.presentation.video_detail
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
@@ -57,5 +58,23 @@ class VideoDetailViewModel @Inject constructor(
                 }
             }
         }.launchIn(viewModelScope)
+    }
+
+    fun nextVideo(){
+        var curr = _videoIndex.value
+        curr = curr?.plus(1)
+        _videoIndex.postValue(curr)
+
+    }
+    fun prevVideo(){
+        var curr = _videoIndex.value
+        if (curr != null) {
+            //prevent navigate back on first video
+            if(curr > 0){
+                curr = curr.minus(1)
+                _videoIndex.postValue(curr)
+            }
+        }
+
     }
 }
