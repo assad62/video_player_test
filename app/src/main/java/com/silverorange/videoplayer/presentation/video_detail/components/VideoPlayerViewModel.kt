@@ -1,21 +1,17 @@
 package com.silverorange.videoplayer.presentation.video_detail.components
 
-import android.content.Context
-import android.net.Uri
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import androidx.media3.common.MediaItem
-import androidx.media3.common.Player
-import com.silverorange.videoplayer.domain.use_case.get_videos.GetVideosUseCase
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.MediaItem
+import com.silverorange.videoplayer.VideoPlayer
+
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
 import javax.inject.Inject
 
 @HiltViewModel
 class VideoPlayerViewModel @Inject constructor(
+val player: ExoPlayer
 
-    val player: Player,
 ): ViewModel(){
 
 

@@ -7,15 +7,27 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.media3.ui.PlayerView
+import com.google.android.exoplayer2.ui.StyledPlayerView
 
 @Composable
 fun VideoPlayer(
     url:String,
     viewModel: VideoPlayerViewModel = hiltViewModel()
 ){
+
+    /*
+    StyledPlayerView(context).apply {
+                    player = exoPlayer
+                    layoutParams =
+                        FrameLayout.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.MATCH_PARENT
+                        )
+                }
+     */
     val context = LocalContext.current
-    val playerView = PlayerView(context)
+    val playerView = StyledPlayerView(context)
+
     val playWhenReady by rememberSaveable {
         mutableStateOf(false)
     }

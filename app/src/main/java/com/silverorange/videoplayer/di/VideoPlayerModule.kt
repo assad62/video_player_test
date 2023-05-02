@@ -1,8 +1,7 @@
 package com.silverorange.videoplayer.di
 
 import android.app.Application
-import androidx.media3.common.Player
-import androidx.media3.exoplayer.ExoPlayer
+import com.google.android.exoplayer2.ExoPlayer
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,7 +14,7 @@ object VideoPlayerModule {
 
     @Provides
     @ViewModelScoped
-    fun provideVideoPlayer(app: Application): Player {
+    fun provideVideoPlayer(app: Application): ExoPlayer {
         return ExoPlayer.Builder(app)
             .build()
     }
