@@ -16,7 +16,7 @@ class VideoPlayerViewModel @Inject constructor(val player: ExoPlayer): ViewModel
         player.prepare()
     }
 
-    fun loadVideo(url: String){
+    fun initVideoPlayer(url: String){
         val mediaItem = MediaItem.fromUri(url)
         player.setMediaItem(mediaItem)
     }

@@ -39,12 +39,17 @@ fun VideoPlayer(
 
     //playerView.setKeepContentOnPlayerReset(true);
 
+    LaunchedEffect(key1 = "", block = {
+        viewModel.initVideoPlayer(url)
+    })
+
+
     val playWhenReady by rememberSaveable {
         mutableStateOf(false)
     }
     viewModel.player.playWhenReady = playWhenReady
     playerView.player = viewModel.player
-    viewModel.loadVideo(url)
+
     val shouldShowControls by remember { mutableStateOf(true) }
 
     var isPlaying by remember { mutableStateOf(viewModel.player.isPlaying) }
