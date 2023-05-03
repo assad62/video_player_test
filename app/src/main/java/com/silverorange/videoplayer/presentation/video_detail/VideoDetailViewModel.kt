@@ -61,9 +61,15 @@ class VideoDetailViewModel @Inject constructor(
     }
 
     fun nextVideo(){
+        val videosCount = _state.value.videos.count()
         var curr = _videoIndex.value
-        curr = curr?.plus(1)
-        _videoIndex.postValue(curr)
+
+        if (curr != null) {
+            if(curr < videosCount - 1){
+                curr = curr.plus(1)
+                _videoIndex.postValue(curr)
+            }
+        }
 
     }
     fun prevVideo(){
