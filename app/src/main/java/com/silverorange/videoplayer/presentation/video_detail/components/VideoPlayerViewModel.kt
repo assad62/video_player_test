@@ -12,13 +12,16 @@ import javax.inject.Inject
 @HiltViewModel
 class VideoPlayerViewModel @Inject constructor(val player: ExoPlayer): ViewModel(){
 
+
     init {
         player.prepare()
     }
 
     fun initVideoPlayer(url: String){
+        val videoMediaItemList = mutableListOf<MediaItem>()
         val mediaItem = MediaItem.fromUri(url)
-        player.setMediaItem(mediaItem)
+        videoMediaItemList.add(mediaItem)
+        player.setMediaItems(videoMediaItemList)
     }
 
     override fun onCleared() {
