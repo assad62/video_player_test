@@ -34,7 +34,7 @@ fun VideoPlayer(
 
 
     val context = LocalContext.current
-    val playerView = StyledPlayerView(context)
+    val playerView = remember {StyledPlayerView(context)}
     playerView.useController = false
 
     //playerView.setKeepContentOnPlayerReset(true);
