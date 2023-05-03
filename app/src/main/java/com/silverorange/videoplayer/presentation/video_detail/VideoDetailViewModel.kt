@@ -22,7 +22,7 @@ class VideoDetailViewModel @Inject constructor(
 ):ViewModel(){
 
     private val _state = mutableStateOf(VideoListState())
-    val state: State<VideoListState> = _state
+    val state: State<VideoListState> get()= _state
 
     private val _videoIndex:MutableLiveData<Int> = MutableLiveData(0)
     val videoIndex:LiveData<Int> get() = _videoIndex
@@ -41,12 +41,24 @@ class VideoDetailViewModel @Inject constructor(
         return videolinkedList
     }
 
+    private fun createUrlList( videoList:List<Video>?):ArrayList<String>{
+        val videoArrList:ArrayList<String> = ArrayList()
+        if (videoList != null) {
+            for(video in videoList){
+                videoArrList.add(video.fullURL)
+            }
+        }
+        return videoArrList
+    }
+
     private fun getVideos() {
         getVideosUseCase().onEach { result ->
             when (result) {
                 is Resource.Success -> {
-
-                    _state.value = VideoListState(videos = createLinkedList(result.data))
+                    _state.value = VideoListState(
+                        videos = createLinkedList(result.data),
+                        videoUrlList = createUrlList(result.data)
+                    )
                 }
                 is Resource.Error -> {
                     _state.value = VideoListState(
@@ -60,12 +72,15 @@ class VideoDetailViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
+
+
+
     fun nextVideo(){
         val videosCount = _state.value.videos.count()
         var curr = _videoIndex.value
 
         if (curr != null) {
-            if(curr < videosCount - 1){
+            if(curr < (videosCount - 1)){
                 curr = curr.plus(1)
                 _videoIndex.postValue(curr)
             }

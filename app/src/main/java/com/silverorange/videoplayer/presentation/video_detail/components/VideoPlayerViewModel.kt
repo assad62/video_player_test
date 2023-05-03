@@ -17,16 +17,13 @@ class VideoPlayerViewModel @Inject constructor(val player: ExoPlayer): ViewModel
         player.prepare()
     }
 
-    fun initVideoPlayer(url: String){
+    fun initVideoPlayer(urlList: List<String>){
         val videoMediaItemList = mutableListOf<MediaItem>()
-        val mediaItem = MediaItem.fromUri(url)
-        videoMediaItemList.add(mediaItem)
+        for(url in urlList){
+            val mediaItem = MediaItem.fromUri(url)
+            videoMediaItemList.add(mediaItem)
+        }
         player.setMediaItems(videoMediaItemList)
-    }
-
-    fun addVideo(url:String){
-        val mediaItem = MediaItem.fromUri(url)
-        player.addMediaItem(mediaItem)
     }
 
 

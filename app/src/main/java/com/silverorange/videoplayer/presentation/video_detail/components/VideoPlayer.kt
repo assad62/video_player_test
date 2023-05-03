@@ -25,26 +25,20 @@ import com.silverorange.videoplayer.R
 
 @Composable
 fun VideoPlayer(
-    url:String,
+    urlList:List<String>,
     viewModel: VideoPlayerViewModel = hiltViewModel(),
     next:()->Unit,
     previous:()->Unit
 ){
 
 
-    var shouldAddVideo  by remember { mutableStateOf(false) }
+
     val context = LocalContext.current
     val playerView = remember {StyledPlayerView(context)}
     playerView.useController = false
 
-    //playerView.setKeepContentOnPlayerReset(true);
+    viewModel.initVideoPlayer(urlList)
 
-    LaunchedEffect(key1 = "", block = {
-        viewModel.initVideoPlayer(url)
-    })
-   if(shouldAddVideo){
-       viewModel.addVideo(url)
-   }
 
     val playWhenReady by rememberSaveable {
         mutableStateOf(false)
@@ -75,10 +69,9 @@ fun VideoPlayer(
                           },
             onForwardClick = {
                 //pause on navigation
-                next()
-                shouldAddVideo = true
                 isPlaying = false
                 viewModel.player.seekToNextMediaItem()
+                next()
 
                              },
             onPauseToggle = { when {

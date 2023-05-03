@@ -2,11 +2,14 @@ package com.silverorange.videoplayer.presentation.video_detail
 
 import android.util.Log
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
@@ -27,13 +30,7 @@ fun VideoDetailScreen(
     viewModel: VideoDetailViewModel = hiltViewModel()
 ){
     val state = viewModel.state.value
-    val index = viewModel.videoIndex.observeAsState().value
-    Log.d("99120", "index is $index")
-    val video = index?.let {
-        viewModel.state.value.videos.nodeAtIndex(it)?.value
-    }
-    val title = video?.title
-    val authorName = video?.author?.name
+    val urlList = viewModel.state.value.videoUrlList
 
 
     Scaffold(topBar = { TopBar() }) {
@@ -49,81 +46,19 @@ fun VideoDetailScreen(
                     CircularProgressIndicator()
                 }
 
-                video?.fullURL?.let { it1 ->
-
-                    VideoPlayer(url = it1,
-                        next = {
+                    VideoPlayer(urlList = urlList
+                        , next = {
 
                             viewModel.nextVideo()
 
-                       }, previous = {
+                        }, previous = {
 
                             viewModel.prevVideo()
-                       }
-                    )
-                }
-                Spacer(modifier = Modifier.size(10.dp))
-                Column(){
+                        })
+                     videoDetails()
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment =   Alignment.Bottom,
-                        horizontalArrangement = Arrangement.Start
-                    ) {
-                        Spacer(modifier = Modifier.size(5.dp))
-                        Text(
-                            "Title: ",
-                            style = TextStyle(
-                                fontSize = 24.sp,
-                                fontFamily = FontFamily.Monospace,
-                                fontWeight = FontWeight.W800,
-                                fontStyle = FontStyle.Normal,
 
-                            )
-                        )
-                        if (title != null) {
-                            Text(text = title,
-                                style = TextStyle(
-                                    fontSize = 18.sp,
-                                    fontFamily = FontFamily.Monospace,
-                                    fontWeight = FontWeight.W800,
-                                    fontStyle = FontStyle.Normal,
-                                ))
-                        }
-                    }
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Start,
-                        verticalAlignment =   Alignment.Bottom
-                    ) {
-                        Spacer(modifier = Modifier.size(10.dp))
-                        Text("Author: ",
-                            style = TextStyle(
-                                fontSize = 21.sp,
-                                fontFamily = FontFamily.Monospace,
-                                fontWeight = FontWeight.W800,
-                                fontStyle = FontStyle.Normal,
-                            )
-                        )
-                        if (authorName != null) {
-                            Text(text = authorName,
-                                textAlign = TextAlign.Center,
-                                style = TextStyle(
-                                    fontSize = 18.sp,
-                                    fontFamily = FontFamily.Monospace,
-                                    fontWeight = FontWeight.W800,
-                                    fontStyle = FontStyle.Normal,
-                                )
-                            )
-                        }
-                    }
-                }
-                Spacer(modifier = Modifier.size(10.dp))
 
-                video?.description?.let {
-                        it1 ->
-                    VideoDescription(videoDescription = it1)
-                }
 
             }
 
@@ -134,6 +69,77 @@ fun VideoDetailScreen(
 
 }
 
+@Composable
+fun videoDetails( viewModel: VideoDetailViewModel = hiltViewModel()){
+
+    val index = viewModel.videoIndex.observeAsState().value
+
+    val video = index?.let { viewModel.state.value.videos.nodeAtIndex(it)?.value }
+    val title = video?.title
+    val authorName = video?.author?.name
 
 
+    Spacer(modifier = Modifier.size(10.dp))
+    Column(){
 
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment =   Alignment.Bottom,
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Spacer(modifier = Modifier.size(5.dp))
+            Text(
+                "Title: ",
+                style = TextStyle(
+                    fontSize = 24.sp,
+                    fontFamily = FontFamily.Monospace,
+                    fontWeight = FontWeight.W800,
+                    fontStyle = FontStyle.Normal,
+
+                    )
+            )
+            if (title != null) {
+                Text(text = title,
+                    style = TextStyle(
+                        fontSize = 18.sp,
+                        fontFamily = FontFamily.Monospace,
+                        fontWeight = FontWeight.W800,
+                        fontStyle = FontStyle.Normal,
+                    ))
+            }
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment =   Alignment.Bottom
+        ) {
+            Spacer(modifier = Modifier.size(10.dp))
+            Text("Author: ",
+                style = TextStyle(
+                    fontSize = 21.sp,
+                    fontFamily = FontFamily.Monospace,
+                    fontWeight = FontWeight.W800,
+                    fontStyle = FontStyle.Normal,
+                )
+            )
+            if (authorName != null) {
+                Text(text = authorName,
+                    textAlign = TextAlign.Center,
+                    style = TextStyle(
+                        fontSize = 18.sp,
+                        fontFamily = FontFamily.Monospace,
+                        fontWeight = FontWeight.W800,
+                        fontStyle = FontStyle.Normal,
+                    )
+                )
+            }
+        }
+    }
+    Spacer(modifier = Modifier.size(10.dp))
+
+    video?.description?.let {
+            it1 ->
+        VideoDescription(videoDescription = it1)
+    }
+
+}
