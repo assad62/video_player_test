@@ -24,6 +24,13 @@ class VideoPlayerViewModel @Inject constructor(val player: ExoPlayer): ViewModel
         player.setMediaItems(videoMediaItemList)
     }
 
+    fun addVideo(url:String){
+        Log.d("9910","inside add video")
+        val mediaItem = MediaItem.fromUri(url)
+        player.addMediaItem(mediaItem)
+    }
+
+
     override fun onCleared() {
         super.onCleared()
         player.release()

@@ -32,7 +32,7 @@ fun VideoPlayer(
 ){
 
 
-
+    var shouldAddVideo  by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val playerView = remember {StyledPlayerView(context)}
     playerView.useController = false
@@ -42,7 +42,9 @@ fun VideoPlayer(
     LaunchedEffect(key1 = "", block = {
         viewModel.initVideoPlayer(url)
     })
-
+   if(shouldAddVideo){
+       viewModel.addVideo(url)
+   }
 
     val playWhenReady by rememberSaveable {
         mutableStateOf(false)
@@ -68,13 +70,17 @@ fun VideoPlayer(
             onBackClick = {
                 //pause on navigation
                 isPlaying = false
-                viewModel.player.pause()
-                previous() },
+                viewModel.player.seekToPreviousMediaItem()
+                previous()
+                          },
             onForwardClick = {
                 //pause on navigation
+                next()
+                shouldAddVideo = true
                 isPlaying = false
-                viewModel.player.pause()
-                next() },
+                viewModel.player.seekToNextMediaItem()
+
+                             },
             onPauseToggle = { when {
                 viewModel.player.isPlaying -> {
                     // pause the video
@@ -119,7 +125,7 @@ fun VideoPlayer(
         enter = fadeIn(),
         exit = fadeOut()
     ) {
-        Box(modifier = Modifier.background(Color.Black.copy(alpha = 0.6f))) {
+        Box(modifier = Modifier.background(Color.White.copy(alpha = 0.6f))) {
 
 
             CenterControls(
