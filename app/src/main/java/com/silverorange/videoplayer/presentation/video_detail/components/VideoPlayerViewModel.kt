@@ -1,11 +1,8 @@
 package com.silverorange.videoplayer.presentation.video_detail.components
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
-import com.silverorange.videoplayer.VideoPlayer
-
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

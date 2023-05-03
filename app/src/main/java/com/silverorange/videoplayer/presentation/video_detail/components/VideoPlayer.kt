@@ -1,7 +1,6 @@
 package com.silverorange.videoplayer.presentation.video_detail.components
 
 import android.media.metrics.PlaybackStateEvent.STATE_ENDED
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -156,7 +155,7 @@ private fun CenterControls(
 ) {
     val isVideoPlaying = remember(isPlaying()) { isPlaying() }
 
-    val playerState = remember(playbackState()) { playbackState() }
+    remember(playbackState()) { playbackState() }
 
     Row(modifier = modifier, horizontalArrangement = Arrangement.SpaceEvenly) {
         IconButton(modifier = Modifier.size(40.dp), onClick = onBackClick) {
@@ -164,7 +163,7 @@ private fun CenterControls(
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop,
                 painter = painterResource(id = R.drawable.ic_previous),
-                contentDescription = "Replay 5 seconds"
+                contentDescription = "Go to previous video"
             )
         }
 
@@ -191,7 +190,7 @@ private fun CenterControls(
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop,
                 painter = painterResource(id = R.drawable.ic_next),
-                contentDescription = "Forward 10 seconds"
+                contentDescription = "Go to next video"
             )
         }
     }

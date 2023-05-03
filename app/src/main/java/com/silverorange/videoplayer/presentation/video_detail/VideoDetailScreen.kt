@@ -1,15 +1,11 @@
 package com.silverorange.videoplayer.presentation.video_detail
 
-import android.util.Log
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
@@ -20,9 +16,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.silverorange.videoplayer.presentation.video_detail.components.PlayerControls
-import com.silverorange.videoplayer.presentation.video_detail.components.VideoDescription
 import com.silverorange.videoplayer.presentation.video_detail.components.TopBar
+import com.silverorange.videoplayer.presentation.video_detail.components.VideoDescription
 import com.silverorange.videoplayer.presentation.video_detail.components.VideoPlayer
 
 @Composable
@@ -55,6 +50,8 @@ fun VideoDetailScreen(
 
                             viewModel.prevVideo()
                         })
+                     //moved to separate composable to prevent
+                    //needless recomposition of video player when index was being changed
                      videoDetails()
 
 
